@@ -73,3 +73,18 @@ select distinct Departamento from ciudades;
 -- Limitar la cantidad de resultados (aconsejable usar junto con ORDER BY)
 select * from dep_col limit 10;
 select * from dep_col limit 9, 5;
+
+-- Set Functions (COUNT, MAX, MIN, SUM, AVG)
+select count(*) from departamentoscol; /*Cuenta el registros guardados*/
+select count(distinct Capital) from departamentoscol;/*Registros con capitales diferentes, bogota aparece 2 veces*/
+select max(`No Municipios`) from departamentoscol;/*Ojo: backticks por el espacio*/
+select min(`Area[Km2]`) from departamentoscol;/*Ojo: backticks por corchetes[]*/
+select sum(`No Municipios`) from departamentoscol;
+select avg(`Año Fundación`) from departamentoscol;
+
+-- Resultados agrupados: Group by
+select count(`Año Fundación`), `Año Fundación` from departamentoscol group by `Año Fundación`;/*Numero departamentos fundados en cada año*/
+select Capital, `Año Fundación` from departamentoscol group by `Año Fundación`;/*No es interesante, los agrupa y muestra la primera capital*/
+
+-- Resultados agrupados cumpliendo una condición.  Having en group by es equivalente a where en select
+select count(`Año Fundación`) as cuenta, `Año Fundación` from departamentoscol group by `Año Fundación` having cuenta>5;

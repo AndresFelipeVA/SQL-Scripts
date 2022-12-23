@@ -1,3 +1,7 @@
+-- Creacion de una base de datos o Schema
+create database andrew;
+
+-- Especificamos con que DB trabajar de aqui en adelante
 use andrew;
 
 -- Creacion de la tabla
@@ -8,6 +12,22 @@ create table provisional (
     lastUpdate timestamp not null default current_timestamp on update current_timestamp,
     primary key (id)
 );
+
+-- Creacion de una tabla con las restricciones al final
+create table enlace (
+	id smallint not null,
+    userName varchar(20),
+    constraint pk_id primary key (id)
+);
+
+-- Modificar la configuracion de una columna
+alter table enlace CHANGE COLUMN userName userName VARCHAR(20) NOT NULL ;
+
+-- Modificar insertando una columna nueva
+alter table provisional add column enlace_id smallint NOT NULL AFTER lastUpdate;
+
+-- Modificar creando restricciones
+alter table provisional add constraint fk_enlace foreign key (enlace_id) references enlace (id);
 
 -- Insertar una fila indicando las columnas especificas
 insert into provisional (firstName, lastName, lastUpdate)
@@ -36,6 +56,9 @@ values 	('Andres11', 'Vallejo11', '2022-06-26'),
 insert into provisional (firstName, lastName)
 select Departamento, Capital from dep_col where Departamento like 'A%';
 
+-- Insertar en una tabla parte de otra usando las mismas columnas (no lo he probado)
+insert into person select * from old_person op where op.person_id > 300;
+
 -- Actualizar una unica celda (fila, columna)
 update provisional set firstName='Pipe' where id=3;
 
@@ -61,6 +84,9 @@ delete from provisional where firstName='PiPe';
 
 -- Borrar todo el contenido de la tabla (hay que deshabilitar safemode)
 delete from provisional;
+
+-- Para borrar todo en safemode, usar una condicion siempre verdadera
+delete from provisional where id>0;
 
 -- Borra toda la tabla
 drop table provisional;
